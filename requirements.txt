@@ -1,2 +1,8 @@
-requests
+blackboxprotobuf
 loguru
+pydantic
+PyExecJS
+qrcode
+requests
+typing_extensions
+websockets>=10,<14

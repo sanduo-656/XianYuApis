@@ -1,0 +1,7 @@
+services:
+  xianyuapis:
+    build: .
+    image: xianyuapis:latest
+    env_file:
+      - .env
+    restart: unless-stopped

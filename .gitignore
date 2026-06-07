@@ -19,6 +19,8 @@ MANIFEST
 *.spec
 .cache
 *.log
+.env
+.env.local
 local_settings.py
 db.sqlite3
 __pypackages__/

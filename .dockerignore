@@ -1,0 +1,15 @@
+.git
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+*.log
+.venv/
+venv/
+env/
+ENV/
+node_modules/
+dist/
+build/
+downloads/

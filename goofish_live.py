@@ -1,6 +1,8 @@
 import base64
 import json
 import asyncio
+import inspect
+import os
 import threading
 import time
 
@@ -23,6 +25,10 @@ class XianyuLive:
         self.xianyu = XianyuApis(self.cookies, self.device_id)
         self.ws = None
 
+    def _connect_websocket(self, headers):
+        headers_arg = 'additional_headers' if 'additional_headers' in inspect.signature(websockets.connect).parameters else 'extra_headers'
+        return websockets.connect(self.base_url, **{headers_arg: headers})
+
     async def list_all_conversations(self, cid):
         headers = {
             "Cookie": get_session_cookies_str(self.xianyu.session),
@@ -35,7 +41,7 @@ class XianyuLive:
             "Accept-Encoding": "gzip, deflate, br, zstd",
             "Accept-Language": "zh-CN,zh;q=0.9",
         }
-        async with websockets.connect(self.base_url, extra_headers=headers) as websocket:
+        async with self._connect_websocket(headers) as websocket:
             asyncio.create_task(self.init(websocket))
             send_mid = generate_mid()
             msg = {
@@ -267,7 +273,7 @@ class XianyuLive:
             "Accept-Language": "zh-CN,zh;q=0.9",
         }
         threading.Thread(target=self.user_alive).start()
-        async with websockets.connect(self.base_url, extra_headers=headers) as websocket:
+        async with self._connect_websocket(headers) as websocket:
             asyncio.create_task(self.init(websocket))
             asyncio.create_task(self.heart_beat(websocket))
             async for message in websocket:
@@ -324,7 +330,10 @@ class XianyuLive:
 
 
 if __name__ == '__main__':
-    cookies_str = r''
+    cookies_str = os.getenv('XIAN_YU_COOKIES', '').strip()
+    if not cookies_str:
+        raise RuntimeError('请先设置 XIAN_YU_COOKIES 环境变量，值为登录后的 goofish.com Cookie 字符串')
+
     xianyuLive = XianyuLive(cookies_str)
 
     # 1 获取全部聊天记录
