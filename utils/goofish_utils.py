@@ -1,11 +1,8 @@
 import base64
 import json
-import subprocess
-from functools import partial
 
 import blackboxprotobuf
 
-subprocess.Popen = partial(subprocess.Popen, encoding="utf-8")
 import execjs
 
 try:

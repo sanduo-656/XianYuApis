@@ -80,9 +80,9 @@ pip install -r requirements.txt
 
 登录 [goofish.com](https://www.goofish.com) 后，从浏览器开发者工具中复制完整 Cookie 字符串，填入代码对应位置：
 
-```python
-# goofish_live.py 底部
-cookies_str = r'your_cookie_string_here'
+```bash
+cp .env.example .env
+# 编辑 .env，将 XIAN_YU_COOKIES 改为登录后的完整 Cookie 字符串
 ```
 
 > Cookie 必须是**登录后的状态**，否则无法获取消息。
@@ -91,7 +91,38 @@ cookies_str = r'your_cookie_string_here'
 ### 直接运行
 
 ```bash
+export XIAN_YU_COOKIES='your_cookie_string_here'
 python goofish_live.py
+```
+
+Windows PowerShell:
+
+```powershell
+$env:XIAN_YU_COOKIES='your_cookie_string_here'
+python goofish_live.py
+```
+
+### Docker 运行
+
+先准备 `.env`：
+
+```bash
+cp .env.example .env
+# 编辑 .env，将 XIAN_YU_COOKIES 改为登录后的完整 Cookie 字符串
+```
+
+使用 Docker Compose：
+
+```bash
+docker compose up -d --build
+docker compose logs -f
+```
+
+或直接使用 Docker：
+
+```bash
+docker build -t xianyuapis .
+docker run --rm -it --env-file .env xianyuapis
 ```
 
 ---
